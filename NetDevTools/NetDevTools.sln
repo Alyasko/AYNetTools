@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetDevTools", "NetDevTools\NetDevTools.csproj", "{7E1F6AF6-2068-4C28-AB00-7F40E8218D22}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetDevTools", "NetDevTools\NetDevTools.csproj", "{7E1F6AF6-2068-4C28-AB00-7F40E8218D22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetDevTools.Tests", "NetDevTools.Tests\NetDevTools.Tests.csproj", "{5D3F42BD-8985-4508-ABB1-2154D2A46A7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetDevTools.Tests", "NetDevTools.Tests\NetDevTools.Tests.csproj", "{5D3F42BD-8985-4508-ABB1-2154D2A46A7F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetDevTools.ProjectRunner", "NetDevTools.ProjectRunner\NetDevTools.ProjectRunner.csproj", "{EFF9A764-AC27-40B9-851A-FEB205C3A549}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{5D3F42BD-8985-4508-ABB1-2154D2A46A7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D3F42BD-8985-4508-ABB1-2154D2A46A7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D3F42BD-8985-4508-ABB1-2154D2A46A7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFF9A764-AC27-40B9-851A-FEB205C3A549}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFF9A764-AC27-40B9-851A-FEB205C3A549}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFF9A764-AC27-40B9-851A-FEB205C3A549}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFF9A764-AC27-40B9-851A-FEB205C3A549}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "NetDevTools.ProjectRunner": {
+      "commandName": "Project",
+      "commandLineArgs": "P:\\Projects\\Git\\prime"
+    }
+  }
+}
