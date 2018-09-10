@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NetCrossRun.Core;
 using NetDevTools.ProjectRunner.Models;
 
 namespace NetDevTools.ProjectRunner
@@ -35,16 +36,14 @@ namespace NetDevTools.ProjectRunner
             Solution = new Solution(slnFi.FullName);
         }
 
-        public IEnumerable<Project> FindProject(string namePart)
+        public Project FindProject(string name)
         {
-            if (string.IsNullOrWhiteSpace(namePart))
-                return Enumerable.Empty<Project>();
-            
-            return Solution.Projects.Where(x =>
-            {
-                return x.ExecutableFile != null && x.ExecutableFile.FullName.IndexOf(namePart, StringComparison.OrdinalIgnoreCase) != -1
-                       || x.ProjectFile.FullName.IndexOf(namePart, StringComparison.OrdinalIgnoreCase) != -1;
-            });
+            return Solution.Projects.FirstOrDefault(x => x.Name.Equals(name));
+        }
+
+        public void BuildSolution()
+        {
+            $"dotnet build {Solution.SolutionFile.FullName}".ExecuteCommand().WaitForExit();
         }
     }
 }

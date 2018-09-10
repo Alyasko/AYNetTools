@@ -8,4 +8,7 @@
       <HintPath>../../../NetCrossRun/NetCrossRun/NetCrossRun.Core/bin/Release/netstandard2.0/NetCrossRun.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ReadLine" Version="2.0.1" />
+  </ItemGroup>
 </Project>

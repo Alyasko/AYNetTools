@@ -14,12 +14,11 @@ namespace NetDevTools.ProjectRunner
             Console.WriteLine("--- NetDevTools.ProjectRunner ---");
 
             var slnPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
             if (args.Length > 0)
                 slnPath = args[0];
 
             var slnDir = new DirectoryInfo(slnPath);
-            if(!slnDir.Exists)
+            if (!slnDir.Exists)
                 throw new DirectoryNotFoundException("Specified directory not found.");
 
             Console.WriteLine($"App folder is '{slnDir.Name}'");
@@ -34,7 +33,7 @@ namespace NetDevTools.ProjectRunner
                 Console.WriteLine($"Found: {slnFile.Name}");
 
             solutionManager.LoadSolution(SolutionManager.DefaultSolutionName);
-            
+
             foreach (var project in solutionManager.Solution.Projects)
                 Console.WriteLine($"Loaded {project.ProjectFile.FullName}");
 
@@ -43,8 +42,26 @@ namespace NetDevTools.ProjectRunner
             var projectSelector = new ProjectSelector(solutionManager);
             var selectedProject = projectSelector.SelectProject();
 
-            
-            $"dotnet {selectedProject.ExecutableFile.FullName}".ExecuteCommand(false, solutionManager.Solution.SolutionDirectory.FullName).WaitForExit();
+            Console.Write($"Found {selectedProject.Name}. ");
+            if (selectedProject.BuildActionNeeded)
+            {
+                Console.Write("Build required. ");
+
+                if (ReadLineTools.Confirm("Run build?"))
+                {
+                    solutionManager.BuildSolution();
+                    Console.WriteLine("Solution built. ");
+
+                    if (ReadLineTools.Confirm($"Run project '{selectedProject.Name}'?"))
+                    {
+                        $"dotnet {selectedProject.ExecutableFile.FullName}".ExecuteCommand(false, solutionManager.Solution.SolutionDirectory.FullName).WaitForExit();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Building '{selectedProject.Name}'");
+                }
+            }
         }
     }
 }
