@@ -9,7 +9,7 @@ namespace NetDevTools.ProjectRunner.Configuration
     public class CustomCommand
     {
         public string Text { get; set; }
-        public string Command { get; set; }
+        public string[] Commands { get; set; }
     }
 
     public class Config
@@ -21,6 +21,16 @@ namespace NetDevTools.ProjectRunner.Configuration
         {
             DefaultSolutionName = "Prime.sln",
             Commands = new List<CustomCommand>()
+            {
+                new CustomCommand()
+                {
+                    Text = "ng prime.manager.client run",
+                    Commands = new string[]
+                    {
+                        "cd \\Ext\\Prime.Manager.Client\\ui && ng serve"
+                    }
+                }
+            }
         };
 
         private static Config LoadConfig()

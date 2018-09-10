@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Management;
 using System.Text;
+using NetCrossRun.Core;
+using NetDevTools.ProjectRunner.Configuration;
 
 namespace NetDevTools.ProjectRunner
 {
@@ -32,7 +35,8 @@ namespace NetDevTools.ProjectRunner
             try
             {
                 Process proc = Process.GetProcessById(pid);
-                proc.Kill();
+                if(!proc.HasExited)
+                    proc.Kill();
             }
             catch (ArgumentException)
             {
@@ -57,6 +61,20 @@ namespace NetDevTools.ProjectRunner
                         KillProcessAndChildren(proc.Id);
                     }
                     processes.Clear();
+                    continue;
+                }
+
+                var customCommand =
+                    Config.I.Commands.FirstOrDefault(x => x.Text.Equals(input, StringComparison.OrdinalIgnoreCase));
+                if (customCommand != null)
+                {
+                    var concatCommands = string.Join(" && ", customCommand.Commands);
+                    processes.Add(concatCommands.ExecuteCommand(new ProcessStartInfo()
+                    {
+                        WorkingDirectory = _solutionManager.Solution.SolutionDirectory.FullName,
+                        CreateNoWindow = false,
+                        UseShellExecute = true
+                    }));
                     continue;
                 }
 
