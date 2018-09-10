@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using NetCrossRun.Core;
+using NetDevTools.ProjectRunner.Configuration;
 
 namespace NetDevTools.ProjectRunner
 {
@@ -16,6 +18,7 @@ namespace NetDevTools.ProjectRunner
             Console.WriteLine("--- NetDevTools.ProjectRunner ---");
             Console.WriteLine("Supports only .NET Core applications.");
             Console.WriteLine("Print 'exit' to exit the program.");
+            Console.WriteLine("Print 'kill all' to kill all running processes.");
 
             // Open sln folder.
             var slnPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -36,54 +39,19 @@ namespace NetDevTools.ProjectRunner
             foreach (var slnFile in solutionManager.Solutions)
                 Console.WriteLine($"Found: {slnFile.Name}");
 
-            var solution = solutionManager.SelectSolution(SolutionManager.DefaultSolutionName);
+            var solutionName = ReadLine.Read($"Enter solution name (default '{Config.I.DefaultSolutionName}'): ", Config.I.DefaultSolutionName);
+            if (string.IsNullOrWhiteSpace(solutionName))
+                throw new InvalidOperationException("Solution name is empty.");
+
+            var solution = solutionManager.SelectSolution(solutionName);
             ReadLine.AutoCompletionHandler = new AutocompletionHandler(solutionManager.Solution);
 
             // List projects.
             Console.WriteLine($"Loaded {solution.Projects.Count()} projects.");
 
-            while (true)
-            {
-                var input = ReadLine.Read("Enter project name: ");
-
-                if(input.Equals("exit", StringComparison.OrdinalIgnoreCase))
-                    break;
-
-                var selectedProject = solutionManager.FindProject(input);
-                if (selectedProject == null)
-                {
-                    Console.WriteLine("Project not found.");
-                    continue;
-                }
-
-                // Build and run.
-                Console.Write($"{selectedProject.Name} selected. ");
-                if (selectedProject.BuildActionNeeded)
-                {
-                    Console.Write("Build required. ");
-
-                    if (ReadLineTools.Confirm("Run build?"))
-                    {
-                        solutionManager.BuildSolution();
-                        Console.WriteLine("Solution built. ");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Building '{selectedProject.Name}'");
-                    }
-                }
-
-                if (ReadLineTools.Confirm($"Run project '{selectedProject.Name}'?"))
-                {
-                    var command = $"dotnet run";
-                    command.ExecuteCommand(new ProcessStartInfo()
-                    {
-                        WorkingDirectory = selectedProject.ProjectDirectory.FullName,
-                        CreateNoWindow = false,
-                        UseShellExecute = true
-                    });
-                }
-            }
+            // Run command processor.
+            var cmdProcessor = new CommandProcessor(solutionManager);
+            cmdProcessor.Run();
         }
     }
 }

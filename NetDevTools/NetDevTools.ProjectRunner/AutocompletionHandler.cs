@@ -21,7 +21,7 @@ namespace NetDevTools.ProjectRunner
         // index - The index of the terminal cursor within {text}
         public string[] GetSuggestions(string text, int index)
         {
-            var suggestions = _solution.Projects.Where(x => x.ProjectType == ProjectType.DotNetCoreRunnable).Select(x => x.Name).Concat(new string[] { "exit" });
+            var suggestions = _solution.Projects.Where(x => x.ProjectType == ProjectType.DotNetCoreRunnable).Select(x => x.Name).Concat(new string[] { "exit", "kill all" });
             return suggestions.Where(x => x.IndexOf(text, StringComparison.OrdinalIgnoreCase) != -1).OrderBy(x => x.Length).ToArray();
         }
     }

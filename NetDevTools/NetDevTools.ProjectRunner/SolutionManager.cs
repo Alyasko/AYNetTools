@@ -9,7 +9,6 @@ namespace NetDevTools.ProjectRunner
 {
     public class SolutionManager
     {
-        public const string DefaultSolutionName = "Prime.sln";
         private readonly DirectoryInfo _slnDirInfo;
         
         public List<FileInfo> Solutions { get; set; }

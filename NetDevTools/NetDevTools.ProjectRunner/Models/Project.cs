@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using NetCrossRun.Core;
 
 namespace NetDevTools.ProjectRunner.Models
 {
@@ -70,5 +72,16 @@ namespace NetDevTools.ProjectRunner.Models
 
         public bool BuildActionNeeded { get; set; }
         public ProjectType ProjectType { get; set; } = ProjectType.Undefined;
+
+        public Process Run()
+        {
+            var command = $"dotnet run";
+            return command.ExecuteCommand(new ProcessStartInfo()
+            {
+                WorkingDirectory = ProjectDirectory.FullName,
+                CreateNoWindow = false,
+                UseShellExecute = true
+            });
+        }
     }
 }
