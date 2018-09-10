@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace NetDevTools.ProjectRunner.Models
 {
@@ -10,7 +11,6 @@ namespace NetDevTools.ProjectRunner.Models
         {
             Name = name;
             ProjectFile = new FileInfo(fullPath);
-
             if (ProjectFile.Exists == false)
                 throw new FileNotFoundException($"Project file '{fullPath}' does not exist.");
 
@@ -45,8 +45,20 @@ namespace NetDevTools.ProjectRunner.Models
 
         private ProjectType ParseProjectType(FileInfo projectFile)
         {
-            var allLines = projectFile.Re
-            
+            var allText = File.ReadAllText(projectFile.FullName);
+            var match = Regex.Match(allText, @"<TargetFramework>(?<type>.*?)<\/TargetFramework>");
+            if (!match.Success)
+                throw new InvalidOperationException($"Unable to find project type for project '{projectFile.Name}'");
+
+            var projectType = match.Groups["type"].Value;
+
+            if (projectType.Equals("netstandard2.0", StringComparison.OrdinalIgnoreCase))
+                return ProjectType.DotNetStandardLib;
+
+            if (projectType.Equals("netcoreapp2.0", StringComparison.OrdinalIgnoreCase))
+                return ProjectType.DotNetCoreRunnable;
+
+            return ProjectType.Undefined;
         }
 
         public string Name { get; set; }

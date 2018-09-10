@@ -12,28 +12,22 @@ namespace NetDevTools.ProjectRunner
         public const string DefaultSolutionName = "Prime.sln";
         private readonly DirectoryInfo _slnDirInfo;
         
-        private List<FileInfo> _slnList;
+        public List<FileInfo> Solutions { get; set; }
         
         public Solution Solution { get; set; }
 
         public SolutionManager(DirectoryInfo dirInfo)
         {
             _slnDirInfo = dirInfo;
+
+            Solutions = _slnDirInfo.GetFiles("*.sln").ToList();
         }
 
-        public IEnumerable<FileInfo> LoadSolutions()
+        public Solution SelectSolution(string slnFileName)
         {
-            _slnList = _slnDirInfo.GetFiles("*.sln").ToList();
-            return _slnList;
-        }
-
-        public void LoadSolution(string slnFileName)
-        {
-            var slnFi = _slnList.FirstOrDefault(x => x.Name.Equals(slnFileName, StringComparison.OrdinalIgnoreCase));
-            if(slnFi == null)
-                throw new InvalidOperationException("Solution not found in list.");
-
-            Solution = new Solution(slnFi.FullName);
+            var slnFi = Solutions.FirstOrDefault(x => x.Name.Equals(slnFileName, StringComparison.OrdinalIgnoreCase));
+            Solution = new Solution(slnFi);
+            return Solution;
         }
 
         public Project FindProject(string name)
