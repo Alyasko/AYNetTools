@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NetCrossRun.Core;
+using Prime.Core;
 
 namespace NetDevTools.ProjectRunner.Models
 {
@@ -54,10 +55,10 @@ namespace NetDevTools.ProjectRunner.Models
 
             var projectType = match.Groups["type"].Value;
 
-            if (projectType.Equals("netstandard2.0", StringComparison.OrdinalIgnoreCase))
+            if (projectType.IndexOf("netstandard", StringComparison.OrdinalIgnoreCase) != -1)
                 return ProjectType.DotNetStandardLib;
 
-            if (projectType.Equals("netcoreapp2.0", StringComparison.OrdinalIgnoreCase))
+            if (projectType.IndexOf("netcoreapp", StringComparison.OrdinalIgnoreCase) != -1)
                 return ProjectType.DotNetCoreRunnable;
 
             return ProjectType.Undefined;

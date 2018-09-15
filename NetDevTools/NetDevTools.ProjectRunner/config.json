@@ -1,0 +1,11 @@
+{
+  "Commands": [
+    {
+      "Text": "ng prime.manager.client run",
+      "Commands": [
+        "cd \\Ext\\Prime.Manager.Client\\ui && ng serve"
+      ]
+    }
+  ],
+  "DefaultSolutionName": "Prime.sln"
+}
