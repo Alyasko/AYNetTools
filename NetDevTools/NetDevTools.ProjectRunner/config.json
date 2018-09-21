@@ -1,17 +1,24 @@
 {
-  "Commands": [
-    {
-      "Text": "ng prime.manager.client run",
-      "Commands": [
-        "cd .\\Ext\\Prime.Manager.Client\\ui && ng serve"
-      ]
-    },
-    {
-      "Text": "ng prime.manager.client install",
-      "Commands": [
-        "cd .\\Ext\\Prime.Manager.Client\\ui && npm install"
-      ]
-    }
-  ],
-  "DefaultSolutionName": "Prime.sln"
+    "Commands": [
+        {
+            "Text": "ng prime.manager.client run",
+            "Commands": [
+                "cd .\\Ext\\Prime.Manager.Client\\ui && ng serve"
+            ]
+        },
+        {
+            "Text": "ng prime.manager.client install",
+            "Commands": [
+                "cd .\\Ext\\Prime.Manager.Client\\ui && npm install"
+            ]
+        },
+        {
+            "Text": "say hello",
+            "Commands": [
+                "echo Hello!",
+                "pause"
+            ] 
+        }
+    ],
+    "DefaultSolutionName": "Prime.sln"
 }

@@ -19,6 +19,11 @@ namespace NetDevTools.ProjectRunner
             Console.WriteLine(message);
         }
 
+        private void NewLine()
+        {
+            Console.WriteLine();
+        }
+
         public void Start(string[] args)
         {
             try
@@ -34,13 +39,16 @@ namespace NetDevTools.ProjectRunner
         private void StartInternal(string[] args)
         {
             Log("--- NetDevTools.ProjectRunner ---");
-            Log("Supports only .NET Core applications.");
-            Log("Print 'exit' to exit the program.");
-            Log("Print 'kill all' to kill all running processes.");
+            Log("Supports running only .NET Core applications.");
+            NewLine();
+            Log("> Print 'exit' to exit the program.");
+            Log("> Print 'kill all' to kill all running processes.");
+            NewLine();
 
             var context = AppContext.Create(args);
-
-            Log($"App folder is '{context.SolutionDirectory.Name}'");
+            Log($"Using config file '{context.ConfigFile.FullName}'.");
+            Log($"App folder is '{context.SolutionDirectory.FullName}'");
+            NewLine();
 
             // Load solution.
             var solutionManager = new SolutionManager(context);
@@ -48,7 +56,7 @@ namespace NetDevTools.ProjectRunner
 
             // Print out found solutions.
             foreach (var slnFile in solutionManager.Solutions)
-                Log($"Found: {slnFile.Name}");
+                Log($"Found solution: {slnFile.Name}");
 
             // Read solution name.
             var solutionName = ReadLine.Read($"Enter solution name (default '{context.AppConfig.DefaultSolutionName}'): ", context.AppConfig.DefaultSolutionName);

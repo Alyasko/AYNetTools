@@ -9,7 +9,8 @@ namespace NetDevTools.ProjectRunner.Models
     {
         public Solution(FileInfo slnFile)
         {
-            SolutionFile = slnFile;
+            SolutionFile = slnFile ?? throw new NullReferenceException("Specified solution is not found in list of loaded solutions.");
+
             if (SolutionFile.Exists == false)
                 throw new FileNotFoundException("Solution file not found.");
 

@@ -2,7 +2,7 @@
   "profiles": {
     "NetDevTools.ProjectRunner": {
       "commandName": "Project",
-      "commandLineArgs": "P:\\Projects\\Git\\prime \"P:\\Projects\\Git\\NetDevTools\\NetDevTools\\NetDevTools.ProjectRunner\\config.json\""
+      "commandLineArgs": "P:\\Projects\\Git\\prime  \"P:\\Projects\\Git\\NetDevTools\\NetDevTools\\NetDevTools.ProjectRunner\\config.json\""
     }
   }
 }
