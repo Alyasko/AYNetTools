@@ -52,7 +52,7 @@ namespace NetDevTools.ProjectRunner
 
             while (true)
             {
-                var input = ReadLine.Read("Enter project name: ");
+                var input = ReadLine.Read("Enter project name or command:\n> ");
 
                 if (input.Equals("exit", StringComparison.OrdinalIgnoreCase))
                     break;
@@ -83,7 +83,7 @@ namespace NetDevTools.ProjectRunner
                 var selectedProject = _solutionManager.FindProject(input);
                 if (selectedProject == null)
                 {
-                    Console.WriteLine("Project not found.");
+                    Console.WriteLine("Project or command not found.");
                     continue;
                 }
 
