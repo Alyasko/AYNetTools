@@ -9,24 +9,30 @@ namespace NetDevTools.ProjectRunner
 {
     public class SolutionManager
     {
+        private readonly AppContext _context;
         private readonly DirectoryInfo _slnDirInfo;
         
         public List<FileInfo> Solutions { get; set; }
         
         public Solution Solution { get; set; }
 
-        public SolutionManager(DirectoryInfo dirInfo)
+        public SolutionManager(AppContext context)
         {
-            _slnDirInfo = dirInfo;
-
-            Solutions = _slnDirInfo.GetFiles("*.sln").ToList();
+            _context = context;
+            _slnDirInfo = context.SolutionDirectory;
         }
 
-        public Solution SelectSolution(string slnFileName)
+        public void LoadSolutions()
+        {
+            Solutions = _slnDirInfo.GetFiles("*.sln").ToList();
+            if (!Solutions.Any())
+                throw new InvalidOperationException("No .sln files found in specified directory.");
+        }
+
+        public void SelectSolution(string slnFileName)
         {
             var slnFi = Solutions.FirstOrDefault(x => x.Name.Equals(slnFileName, StringComparison.OrdinalIgnoreCase));
             Solution = new Solution(slnFi);
-            return Solution;
         }
 
         public Project FindProject(string name)

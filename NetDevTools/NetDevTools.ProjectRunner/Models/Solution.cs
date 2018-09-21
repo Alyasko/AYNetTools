@@ -7,9 +7,9 @@ namespace NetDevTools.ProjectRunner.Models
 {
     public class Solution
     {
-        public Solution(FileInfo slnPath)
+        public Solution(FileInfo slnFile)
         {
-            SolutionFile = slnPath;
+            SolutionFile = slnFile;
             if (SolutionFile.Exists == false)
                 throw new FileNotFoundException("Solution file not found.");
 

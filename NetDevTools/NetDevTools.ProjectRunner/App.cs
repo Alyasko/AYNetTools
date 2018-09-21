@@ -8,49 +8,60 @@ using System.Runtime.InteropServices;
 using System.Text;
 using NetCrossRun.Core;
 using NetDevTools.ProjectRunner.Configuration;
+using NetDevTools.ProjectRunner.Helpers;
 
 namespace NetDevTools.ProjectRunner
 {
     public class App
     {
+        private void Log(string message)
+        {
+            Console.WriteLine(message);
+        }
+
         public void Start(string[] args)
         {
-            Console.WriteLine("--- NetDevTools.ProjectRunner ---");
-            Console.WriteLine("Supports only .NET Core applications.");
-            Console.WriteLine("Print 'exit' to exit the program.");
-            Console.WriteLine("Print 'kill all' to kill all running processes.");
+            try
+            {
+                StartInternal(args);
+            }
+            catch (Exception e)
+            {
+                Log($"Error occurred: {e.Message}");
+            }
+        }
 
-            // Open sln folder.
-            var slnPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            if (args.Length > 0)
-                slnPath = args[0];
+        private void StartInternal(string[] args)
+        {
+            Log("--- NetDevTools.ProjectRunner ---");
+            Log("Supports only .NET Core applications.");
+            Log("Print 'exit' to exit the program.");
+            Log("Print 'kill all' to kill all running processes.");
 
-            var slnDir = new DirectoryInfo(slnPath);
-            if (!slnDir.Exists)
-                throw new DirectoryNotFoundException("Specified directory not found.");
+            var context = AppContext.Create(args);
 
-            Console.WriteLine($"App folder is '{slnDir.Name}'");
+            Log($"App folder is '{context.SolutionDirectory.Name}'");
 
             // Load solution.
-            var solutionManager = new SolutionManager(slnDir);
-            if (!solutionManager.Solutions.Any())
-                throw new InvalidOperationException("No .sln files found in directory.");
+            var solutionManager = new SolutionManager(context);
+            solutionManager.LoadSolutions();
 
+            // Print out found solutions.
             foreach (var slnFile in solutionManager.Solutions)
-                Console.WriteLine($"Found: {slnFile.Name}");
+                Log($"Found: {slnFile.Name}");
 
-            var solutionName = ReadLine.Read($"Enter solution name (default '{Config.I.DefaultSolutionName}'): ", Config.I.DefaultSolutionName);
+            // Read solution name.
+            var solutionName = ReadLine.Read($"Enter solution name (default '{context.AppConfig.DefaultSolutionName}'): ", context.AppConfig.DefaultSolutionName);
             if (string.IsNullOrWhiteSpace(solutionName))
                 throw new InvalidOperationException("Solution name is empty.");
 
-            var solution = solutionManager.SelectSolution(solutionName);
-            ReadLine.AutoCompletionHandler = new AutocompletionHandler(solutionManager.Solution);
+            solutionManager.SelectSolution(solutionName);
+            ReadLine.AutoCompletionHandler = new AutocompletionHandler(context, solutionManager.Solution);
 
-            // List projects.
-            Console.WriteLine($"Loaded {solution.Projects.Count()} projects.");
+            Log($"Loaded {solutionManager.Solution.Projects.Count()} projects.");
 
             // Run command processor.
-            var cmdProcessor = new CommandProcessor(solutionManager);
+            var cmdProcessor = new CommandProcessor(context ,solutionManager);
             cmdProcessor.Run();
         }
     }

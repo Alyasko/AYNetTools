@@ -12,10 +12,12 @@ namespace NetDevTools.ProjectRunner
     public class CommandProcessor
     {
         private readonly SolutionManager _solutionManager;
+        private readonly AppContext _context;
 
-        public CommandProcessor(SolutionManager solutionManager)
+        public CommandProcessor(AppContext context, SolutionManager solutionManager)
         {
             _solutionManager = solutionManager;
+            _context = context;
         }
 
         private void KillProcessAndChildren(int pid)
@@ -65,7 +67,7 @@ namespace NetDevTools.ProjectRunner
                 }
 
                 var customCommand =
-                    Config.I.Commands.FirstOrDefault(x => x.Text.Equals(input, StringComparison.OrdinalIgnoreCase));
+                    _context.AppConfig.Commands.FirstOrDefault(x => x.Text.Equals(input, StringComparison.OrdinalIgnoreCase));
                 if (customCommand != null)
                 {
                     var concatCommands = string.Join(" && ", customCommand.Commands);

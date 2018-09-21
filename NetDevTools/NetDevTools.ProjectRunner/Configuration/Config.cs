@@ -33,12 +33,11 @@ namespace NetDevTools.ProjectRunner.Configuration
             }
         };
 
-        private static Config LoadConfig()
+        public static Config Load(FileInfo file)
         {
-            var fileName = "config.json";
             Config result = null;
 
-            if (File.Exists(fileName))
+            if (file.Exists)
             {
                 var data = File.ReadAllText("config.json");
                 result = JsonConvert.DeserializeObject<Config>(data);
@@ -51,13 +50,10 @@ namespace NetDevTools.ProjectRunner.Configuration
                 {
                     Formatting = Formatting.Indented
                 });
-                File.WriteAllText(fileName, configSerialized);
+                File.WriteAllText(file.FullName, configSerialized);
             }
 
             return result;
         }
-
-        private static readonly Lazy<Config> _i = new Lazy<Config>(LoadConfig);
-        public static Config I => _i.Value;
     }
 }
