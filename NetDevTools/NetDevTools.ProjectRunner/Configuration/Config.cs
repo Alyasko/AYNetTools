@@ -39,7 +39,7 @@ namespace NetDevTools.ProjectRunner.Configuration
 
             if (file.Exists)
             {
-                var data = File.ReadAllText("config.json");
+                var data = File.ReadAllText(file.FullName);
                 result = JsonConvert.DeserializeObject<Config>(data);
             }
             else
