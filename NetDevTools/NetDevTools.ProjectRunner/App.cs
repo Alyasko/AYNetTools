@@ -9,6 +9,7 @@ using System.Text;
 using NetCrossRun.Core;
 using NetDevTools.ProjectRunner.Configuration;
 using NetDevTools.ProjectRunner.Helpers;
+using CommandProcessor = NetDevTools.ProjectRunner.Control.CommandProcessor;
 
 namespace NetDevTools.ProjectRunner
 {
@@ -64,12 +65,11 @@ namespace NetDevTools.ProjectRunner
                 throw new InvalidOperationException("Solution name is empty.");
 
             solutionManager.SelectSolution(solutionName);
-            ReadLine.AutoCompletionHandler = new AutocompletionHandler(context, solutionManager.Solution);
 
             Log($"Loaded {solutionManager.Solution.Projects.Count()} projects.");
 
             // Run command processor.
-            var cmdProcessor = new CommandProcessor(context ,solutionManager);
+            var cmdProcessor = new CommandProcessor(context, solutionManager);
             cmdProcessor.Run();
         }
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NetDevTools.ProjectRunner.Configuration;
+using NetDevTools.ProjectRunner.Control;
 using NetDevTools.ProjectRunner.Models;
 
 namespace NetDevTools.ProjectRunner
@@ -11,9 +12,12 @@ namespace NetDevTools.ProjectRunner
         private readonly Solution _solution;
         private readonly AppContext _context;
 
-        public AutocompletionHandler(AppContext context, Solution solution)
+        private readonly CommandsLookup _commandsLookup;
+
+        public AutocompletionHandler(AppContext context, Solution solution, CommandsLookup commandsLookup)
         {
             _solution = solution;
+            _commandsLookup = commandsLookup;
             _context = context;
         }
 
@@ -24,9 +28,9 @@ namespace NetDevTools.ProjectRunner
         // index - The index of the terminal cursor within {text}
         public string[] GetSuggestions(string text, int index)
         {
-            var suggestions = _solution.Projects.Where(x => x.ProjectType == ProjectType.DotNetCoreRunnable).Select(x => x.Name)
-                .Concat(new string[] { "exit", "kill all" })
-                .Concat(_context.AppConfig.Commands.Select(x => x.Text));
+            var suggestions = _solution.Projects.Where(x => x.ProjectType == ProjectType.DotNetCoreRunnable)
+                .Select(x => x.Name)
+                .Concat(_commandsLookup.Keys);
 
             return suggestions.Where(x => x.IndexOf(text, StringComparison.OrdinalIgnoreCase) != -1).OrderBy(x => x.Length).ToArray();
         }
